@@ -1,14 +1,22 @@
 package mx.edu.utez.proyecto1c.controller;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import mx.edu.utez.proyecto1c.controller.dto.RequestCalculadoraDTO;
+import mx.edu.utez.proyecto1c.service.MySevice;
+import jakarta.validation.Valid;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
 
 @RestController
 public class MyController {
+
+    private final MySevice service;
+
+    public MyController(MySevice service) {
+        this.service = service;
+    }
 
     private final String NOMBRE_ALUMNO = "Angel Said Brito Ibarra";
 
@@ -37,5 +45,11 @@ public class MyController {
         Map<String, String> respuesta = new HashMap<>();
         respuesta.put("respuesta", NOMBRE_ALUMNO);
         return respuesta;
+    }
+
+    @PostMapping("/calculadora")
+    public ResponseEntity<Double> calculadora(@RequestBody @Valid RequestCalculadoraDTO payload) {
+        double resultado = service.calculadora(payload);
+        return ResponseEntity.ok(resultado);
     }
 }
